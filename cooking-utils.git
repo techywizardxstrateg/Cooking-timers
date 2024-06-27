@@ -1,0 +1,58 @@
+import time
+
+class CookingTimer:
+    def __init__(self, duration, name="Timer"):
+        self.duration = duration
+        self.name = name
+
+    def start(self):
+        print(f"{self.name} started for {self.duration} seconds.")
+        time.sleep(self.duration)
+        print(f"{self.name} is done!")
+
+class IngredientConverter:
+    conversion_factors = {
+        ('cups', 'grams', 'flour'): 120,
+        ('cups', 'grams', 'sugar'): 200,
+        ('grams', 'cups', 'flour'): 1/120,
+        ('grams', 'cups', 'sugar'): 1/200,
+    }
+
+    @staticmethod
+    def convert(amount, from_unit, to_unit, ingredient):
+        key = (from_unit, to_unit, ingredient)
+        if key in IngredientConverter.conversion_factors:
+            return amount * IngredientConverter.conversion_factors[key]
+        else:
+            raise ValueError("Conversion not supported for this ingredient and units.")
+
+def main():
+    while True:
+        print("\nCooking Timer and Ingredient Converter")
+        print("1. Set a cooking timer")
+        print("2. Convert ingredient measurements")
+        print("3. Exit")
+        choice = input("Choose an option: ")
+
+        if choice == '1':
+            name = input("Enter the name of the timer: ")
+            duration = int(input("Enter the duration in seconds: "))
+            timer = CookingTimer(duration, name)
+            timer.start()
+        elif choice == '2':
+            amount = float(input("Enter the amount: "))
+            from_unit = input("Enter the unit to convert from (cups/grams): ").lower()
+            to_unit = input("Enter the unit to convert to (cups/grams): ").lower()
+            ingredient = input("Enter the ingredient (flour/sugar): ").lower()
+            try:
+                converted_amount = IngredientConverter.convert(amount, from_unit, to_unit, ingredient)
+                print(f"{amount} {from_unit} of {ingredient} is equal to {converted_amount:.2f} {to_unit}")
+            except ValueError as e:
+                print(e)
+        elif choice == '3':
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
